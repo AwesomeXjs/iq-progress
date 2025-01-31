@@ -1,0 +1,28 @@
+volumes:
+    postgres_volume:
+
+
+services:
+  pg:
+    image: postgres:14-alpine3.17
+    container_name: pg
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data
+    env_file:
+      - .env.example
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  migrator:
+    build:
+      context: .
+      dockerfile: migrator.Dockerfile
+    container_name: migrator
+    depends_on:
+      - pg
+    restart: on-failure
