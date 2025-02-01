@@ -4,7 +4,7 @@ LOCAL_BIN:=$(CURDIR)/bin
 run:
 	go run cmd/main.go
 
-compose:
+up:
 	docker-compose up -d
 
 install-deps:

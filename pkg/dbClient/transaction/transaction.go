@@ -67,7 +67,7 @@ func (m *manager) transaction(ctx context.Context, opts pgx.TxOptions, fn dbClie
 	// Если функция терпит неудачу, возвращаем ошибку, и функция отсрочки выполняет откат
 	// или в противном случае транзакция коммитится.
 	if err = fn(ctx); err != nil {
-		err = errors.Wrap(err, "failed executing code inside transaction")
+		return err
 	}
 
 	return err

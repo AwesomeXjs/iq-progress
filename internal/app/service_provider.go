@@ -10,6 +10,7 @@ import (
 	"github.com/AwesomeXjs/iq-progress/pkg/closer"
 	"github.com/AwesomeXjs/iq-progress/pkg/dbClient"
 	"github.com/AwesomeXjs/iq-progress/pkg/dbClient/pg"
+	"github.com/AwesomeXjs/iq-progress/pkg/dbClient/transaction"
 	"github.com/AwesomeXjs/iq-progress/pkg/logger"
 	"go.uber.org/zap"
 )
@@ -18,9 +19,10 @@ type ServiceProvider struct {
 	httpConfig *config.HTTPConfig
 	pgConfig   *config.PgConfig
 
-	dbClient dbClient.Client
+	dbClient  dbClient.Client
+	txManager dbClient.TxManager
 
-	handler    handler.IHandler
+	handler    *handler.Handler
 	service    service.IService
 	repository repository.IRepository
 }
@@ -80,7 +82,14 @@ func (s *ServiceProvider) DBClient(ctx context.Context) dbClient.Client {
 	return s.dbClient
 }
 
-func (s *ServiceProvider) Repository(ctx context.Context) repository.IRepository {
+func (s *ServiceProvider) InitTxManager(ctx context.Context) dbClient.TxManager {
+	if s.txManager == nil {
+		s.txManager = transaction.NewTransactionManager(s.DBClient(ctx).DB())
+	}
+	return s.txManager
+}
+
+func (s *ServiceProvider) InitRepository(ctx context.Context) repository.IRepository {
 	if s.repository == nil {
 		s.repository = repository.New(s.DBClient(ctx))
 	}
@@ -89,14 +98,14 @@ func (s *ServiceProvider) Repository(ctx context.Context) repository.IRepository
 
 func (s *ServiceProvider) InitService(ctx context.Context) service.IService {
 	if s.service == nil {
-		s.service = service.New()
+		s.service = service.New(s.InitRepository(ctx), s.InitTxManager(ctx))
 	}
 	return s.service
 }
 
-func (s *ServiceProvider) InitHandler(ctx context.Context) handler.IHandler {
+func (s *ServiceProvider) InitHandler(ctx context.Context) *handler.Handler {
 	if s.handler == nil {
-		s.handler = handler.New()
+		s.handler = handler.New(s.InitService(ctx))
 	}
 	return s.handler
 }
