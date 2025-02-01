@@ -19,26 +19,28 @@ const (
 	EnvPath = ".env.example"
 )
 
-// logLevel is a command-line flag for specifying the log level.
-var logLevel = flag.String("l", "info", "log level")
+// LogLevel is a command-line flag for specifying the log level.
+var LogLevel = flag.String("l", "info", "log level")
 
+// App represents the main application with its server and service provider.
 type App struct {
-	server          *echo.Echo
-	serviceProvider *ServiceProvider
+	server          *echo.Echo       // Echo server instance
+	serviceProvider *ServiceProvider // Service provider for dependency management
 }
 
+// New initializes a new App instance and its dependencies.
 func New(ctx context.Context) *App {
 	const mark = "App.App.New"
 
 	app := &App{}
 	err := app.InitDeps(ctx)
 	if err != nil {
-		// Fatal log in case of failure during dependency initialization
 		logger.Fatal("failed to init deps", mark, zap.Error(err))
 	}
 	return app
 }
 
+// InitDeps initializes all the required dependencies for the application.
 func (app *App) InitDeps(ctx context.Context) error {
 	const mark = "App.App.InitDeps"
 
@@ -58,6 +60,7 @@ func (app *App) InitDeps(ctx context.Context) error {
 	return nil
 }
 
+// Run starts the application and runs the HTTP server.
 func (app *App) Run() error {
 	const mark = "App.App.Run"
 
@@ -66,13 +69,14 @@ func (app *App) Run() error {
 		closer.Wait()
 	}()
 
-	err := app.runHTTPServer() // Run the HTTP server
+	err := app.runHTTPServer()
 	if err != nil {
 		logger.Fatal("failed to run http server", mark, zap.Error(err))
 	}
 	return nil
 }
 
+// InitConfig loads environment variables from the .env file.
 func (app *App) InitConfig(_ context.Context) error {
 	const mark = "App.App.InitConfig"
 
@@ -84,31 +88,33 @@ func (app *App) InitConfig(_ context.Context) error {
 	return err
 }
 
-// InitEchoServer sets up the Echo server and its middleware.
+// InitEchoServer sets up the Echo server and middleware.
 func (app *App) InitEchoServer(_ context.Context) error {
-	flag.Parse()                                                 // Parse command-line flags
-	logger.Init(logger.GetCore(logger.GetAtomicLevel(logLevel))) // Initialize logger with the specified log level
+	flag.Parse()
+	logger.Init(logger.GetCore(logger.GetAtomicLevel(LogLevel)))
 
-	app.server = echo.New()              // Create a new Echo server
-	app.server.Use(middleware.Recover()) // Middleware for recovering from panics
-	app.server.Use(middlewares.Logger)   // Custom logging middleware
+	app.server = echo.New()
+	app.server.Use(middleware.Recover())
+	app.server.Use(middlewares.Logger)
 
 	return nil
 }
 
+// initServiceProvider initializes the service provider.
 func (app *App) initServiceProvider(_ context.Context) error {
 	app.serviceProvider = NewServiceProvider()
 	return nil
 }
 
+// runHTTPServer starts the HTTP server on the configured address.
 func (app *App) runHTTPServer() error {
 	const mark = "App.App.runHTTPServer"
 
-	logger.Info("server listening at %v", mark, zap.String("start", app.serviceProvider.HTTPConfig().Address())) // Log the server address
-	return app.server.Start(app.serviceProvider.HTTPConfig().Address())                                          // Start the server at the configured address
+	logger.Info("server listening at %v", mark, zap.String("start", app.serviceProvider.HTTPConfig().Address()))
+	return app.server.Start(app.serviceProvider.HTTPConfig().Address())
 }
 
-// InitRoutes sets up the application routes.
+// InitRoutes sets up application routes using the service provider.
 func (app *App) InitRoutes(ctx context.Context, server *echo.Echo) {
-	app.serviceProvider.InitHandler(ctx).InitRoutes(server) // Initialize routes using the controller
+	app.serviceProvider.InitHandler(ctx).InitRoutes(server)
 }

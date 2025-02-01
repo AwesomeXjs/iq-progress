@@ -5,12 +5,13 @@ import (
 	"strings"
 
 	"github.com/AwesomeXjs/iq-progress/internal/utils"
-	"github.com/AwesomeXjs/iq-progress/pkg/dbClient"
+	"github.com/AwesomeXjs/iq-progress/pkg/dbclient"
 	"github.com/AwesomeXjs/iq-progress/pkg/logger"
 	sq "github.com/Masterminds/squirrel"
 	"go.uber.org/zap"
 )
 
+// AddToBalance adds a specified amount to a user's balance and returns the updated balance.
 func (r *Repository) AddToBalance(ctx context.Context, userID int, amount int) (int, error) {
 
 	const mark = "Repository.AddToBalance"
@@ -27,7 +28,7 @@ func (r *Repository) AddToBalance(ctx context.Context, userID int, amount int) (
 		return 0, err
 	}
 
-	q := dbClient.Query{
+	q := dbclient.Query{
 		Name:     "AddToBalance",
 		QueryRaw: query,
 	}

@@ -23,7 +23,6 @@ get-deps:
 	go get -u github.com/Masterminds/squirrel
 	go get github.com/joho/godotenv
 	go get github.com/stretchr/testify/require
-	go get github.com/golang/mock/gomock
 	go get github.com/rs/cors
 	go get go.uber.org/zap
 	go get go.uber.org/zap/zapcore
@@ -50,3 +49,26 @@ local-migration-down:
 
 init-migration:
 	$(LOCAL_BIN)/goose -dir ${LOCAL_MIGRATION_DIR} create first_tables sql
+
+
+mocks:
+	rm -rf tests/unit/mocks && mkdir -p tests/unit/mocks
+	${LOCAL_BIN}/minimock -i github.com/AwesomeXjs/iq-progress/internal/repository.IRepository -o tests/unit/mocks -s "_minimock.go"
+	${LOCAL_BIN}/minimock -i github.com/AwesomeXjs/iq-progress/pkg/dbClient.TxManager -o tests/unit/mocks -s "_minimock.go"
+	${LOCAL_BIN}/minimock -i github.com/AwesomeXjs/iq-progress/internal/service.IService -o tests/unit/mocks -s "_minimock.go"
+
+test:
+	go clean -testcache
+	go test ./... -covermode count -coverpkg=github.com/AwesomeXjs/iq-progress/tests/... -count 5
+	rm -r tests/unit/service/logs
+
+coverage:
+	go clean -testcache
+	go test ./tests/... -coverprofile=coverage.tmp.out -covermode count  -coverpkg=github.com/AwesomeXjs/iq-progress/internal/... -count 5
+	grep -v 'mocks\|config' coverage.tmp.out > coverage.out
+	rm coverage.tmp.out
+	go tool cover -html=coverage.out -o coverage.html;
+	go tool cover -func=./coverage.out | grep "total";
+	grep -sqFx "/coverage.out" .gitignore || echo "/coverage.out" >> .gitignore
+	rm -r tests/unit/handler/logs
+	rm -r tests/unit/service/logs

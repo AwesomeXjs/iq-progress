@@ -8,10 +8,6 @@ import (
 	"go.uber.org/zap"
 )
 
-const (
-	SuccessMessage = "success"
-)
-
 // Body struct defines the structure of the response body.
 // It includes a title, detail about the error or message, the request URI, and the current time.
 type Body struct {

@@ -17,9 +17,9 @@ func GetCore(level zap.AtomicLevel) zapcore.Core {
 
 	file := zapcore.AddSync(&lumberjack.Logger{
 		Filename:   "logs/app.log",
-		MaxSize:    10, // megabytes 
+		MaxSize:    10,
 		MaxBackups: 3,
-		MaxAge:     1, // days
+		MaxAge:     1,
 	})
 
 	// Set up encoder configurations for production and development.

@@ -4,12 +4,13 @@ import (
 	"context"
 
 	"github.com/AwesomeXjs/iq-progress/internal/model"
-	"github.com/AwesomeXjs/iq-progress/pkg/dbClient"
+	"github.com/AwesomeXjs/iq-progress/pkg/dbclient"
 	"github.com/AwesomeXjs/iq-progress/pkg/logger"
 	sq "github.com/Masterminds/squirrel"
 	"go.uber.org/zap"
 )
 
+// GetOperations retrieves the most recent operations for a specific user.
 func (r *Repository) GetOperations(ctx context.Context, userID int) ([]model.Operation, error) {
 
 	const mark = "Repository.GetOperations"
@@ -17,15 +18,8 @@ func (r *Repository) GetOperations(ctx context.Context, userID int) ([]model.Ope
 	builder := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
 
 	queryBuilder := builder.
-		Select(
-			TxID,
-			SenderID,
-			SenderUsername,
-			ReceiverID,
-			ReceiverUsername,
-			TxType,
-			TxAmount,
-			TxDate,
+		Select(TxID, SenderID, SenderUsername, ReceiverID,
+			ReceiverUsername, TxType, TxAmount, TxDate,
 		).
 		From(TxTable).
 		LeftJoin(U1+" ON t.from_user_id = u1.id").
@@ -40,7 +34,7 @@ func (r *Repository) GetOperations(ctx context.Context, userID int) ([]model.Ope
 		return nil, err
 	}
 
-	q := dbClient.Query{
+	q := dbclient.Query{
 		Name:     "GetOperations",
 		QueryRaw: query,
 	}

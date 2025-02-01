@@ -1,0 +1,1049 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>app: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/AwesomeXjs/iq-progress/internal/app/app.go (0.0%)</option>
+				
+				<option value="file1">github.com/AwesomeXjs/iq-progress/internal/app/service_provider.go (0.0%)</option>
+				
+				<option value="file2">github.com/AwesomeXjs/iq-progress/internal/converter/converter.go (0.0%)</option>
+				
+				<option value="file3">github.com/AwesomeXjs/iq-progress/internal/handler/get_last_operations.go (0.0%)</option>
+				
+				<option value="file4">github.com/AwesomeXjs/iq-progress/internal/handler/init.go (0.0%)</option>
+				
+				<option value="file5">github.com/AwesomeXjs/iq-progress/internal/handler/make_deposit.go (0.0%)</option>
+				
+				<option value="file6">github.com/AwesomeXjs/iq-progress/internal/handler/routes.go (0.0%)</option>
+				
+				<option value="file7">github.com/AwesomeXjs/iq-progress/internal/handler/send.go (0.0%)</option>
+				
+				<option value="file8">github.com/AwesomeXjs/iq-progress/internal/middlewares/logs.go (0.0%)</option>
+				
+				<option value="file9">github.com/AwesomeXjs/iq-progress/internal/repository/add_to_balance.go (0.0%)</option>
+				
+				<option value="file10">github.com/AwesomeXjs/iq-progress/internal/repository/add_transaction.go (0.0%)</option>
+				
+				<option value="file11">github.com/AwesomeXjs/iq-progress/internal/repository/get_operations.go (0.0%)</option>
+				
+				<option value="file12">github.com/AwesomeXjs/iq-progress/internal/repository/init.go (0.0%)</option>
+				
+				<option value="file13">github.com/AwesomeXjs/iq-progress/internal/repository/remove_from_balance.go (0.0%)</option>
+				
+				<option value="file14">github.com/AwesomeXjs/iq-progress/internal/service/get_operations.go (100.0%)</option>
+				
+				<option value="file15">github.com/AwesomeXjs/iq-progress/internal/service/init.go (100.0%)</option>
+				
+				<option value="file16">github.com/AwesomeXjs/iq-progress/internal/service/make_deposit.go (0.0%)</option>
+				
+				<option value="file17">github.com/AwesomeXjs/iq-progress/internal/service/send.go (33.3%)</option>
+				
+				<option value="file18">github.com/AwesomeXjs/iq-progress/internal/utils/response.go (0.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">no coverage</span>
+				<span class="cov1">low coverage</span>
+				<span class="cov2">*</span>
+				<span class="cov3">*</span>
+				<span class="cov4">*</span>
+				<span class="cov5">*</span>
+				<span class="cov6">*</span>
+				<span class="cov7">*</span>
+				<span class="cov8">*</span>
+				<span class="cov9">*</span>
+				<span class="cov10">high coverage</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package app
+
+import (
+        "context"
+        "flag"
+        "fmt"
+
+        "github.com/AwesomeXjs/iq-progress/internal/middlewares"
+        "github.com/AwesomeXjs/iq-progress/pkg/closer"
+        "github.com/AwesomeXjs/iq-progress/pkg/logger"
+        "github.com/joho/godotenv"
+        "github.com/labstack/echo/v4"
+        "github.com/labstack/echo/v4/middleware"
+        "go.uber.org/zap"
+)
+
+const (
+        // EnvPath is the path to the .env file that contains environment variables.
+        EnvPath = ".env.example"
+)
+
+// logLevel is a command-line flag for specifying the log level.
+var LogLevel = flag.String("l", "info", "log level")
+
+type App struct {
+        server          *echo.Echo
+        serviceProvider *ServiceProvider
+}
+
+func New(ctx context.Context) *App <span class="cov0" title="0">{
+        const mark = "App.App.New"
+
+        app := &amp;App{}
+        err := app.InitDeps(ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                // Fatal log in case of failure during dependency initialization
+                logger.Fatal("failed to init deps", mark, zap.Error(err))
+        }</span>
+        <span class="cov0" title="0">return app</span>
+}
+
+func (app *App) InitDeps(ctx context.Context) error <span class="cov0" title="0">{
+        const mark = "App.App.InitDeps"
+
+        inits := []func(ctx context.Context) error{
+                app.InitConfig,
+                app.initServiceProvider,
+                app.InitEchoServer,
+        }
+        for _, fun := range inits </span><span class="cov0" title="0">{
+                if err := fun(ctx); err != nil </span><span class="cov0" title="0">{
+                        logger.Error("failed to init deps", mark, zap.Error(err))
+                        return err
+                }</span>
+        }
+
+        <span class="cov0" title="0">app.InitRoutes(ctx, app.server)
+        return nil</span>
+}
+
+func (app *App) Run() error <span class="cov0" title="0">{
+        const mark = "App.App.Run"
+
+        defer func() </span><span class="cov0" title="0">{
+                closer.CloseAll()
+                closer.Wait()
+        }</span>()
+
+        <span class="cov0" title="0">err := app.runHTTPServer() // Run the HTTP server
+        if err != nil </span><span class="cov0" title="0">{
+                logger.Fatal("failed to run http server", mark, zap.Error(err))
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+
+func (app *App) InitConfig(_ context.Context) error <span class="cov0" title="0">{
+        const mark = "App.App.InitConfig"
+
+        err := godotenv.Load(EnvPath)
+        if err != nil </span><span class="cov0" title="0">{
+                logger.Error("Error loading .env file", mark, zap.String("path", EnvPath))
+                return fmt.Errorf("error loading .env file: %v", err)
+        }</span>
+        <span class="cov0" title="0">return err</span>
+}
+
+// InitEchoServer sets up the Echo server and its middleware.
+func (app *App) InitEchoServer(_ context.Context) error <span class="cov0" title="0">{
+        flag.Parse()                                                 // Parse command-line flags
+        logger.Init(logger.GetCore(logger.GetAtomicLevel(LogLevel))) // Initialize logger with the specified log level
+
+        app.server = echo.New()              // Create a new Echo server
+        app.server.Use(middleware.Recover()) // Middleware for recovering from panics
+        app.server.Use(middlewares.Logger)   // Custom logging middleware
+
+        return nil
+}</span>
+
+func (app *App) initServiceProvider(_ context.Context) error <span class="cov0" title="0">{
+        app.serviceProvider = NewServiceProvider()
+        return nil
+}</span>
+
+func (app *App) runHTTPServer() error <span class="cov0" title="0">{
+        const mark = "App.App.runHTTPServer"
+
+        logger.Info("server listening at %v", mark, zap.String("start", app.serviceProvider.HTTPConfig().Address())) // Log the server address
+        return app.server.Start(app.serviceProvider.HTTPConfig().Address())                                          // Start the server at the configured address
+}</span>
+
+// InitRoutes sets up the application routes.
+func (app *App) InitRoutes(ctx context.Context, server *echo.Echo) <span class="cov0" title="0">{
+        app.serviceProvider.InitHandler(ctx).InitRoutes(server) // Initialize routes using the controller
+}</span>
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package app
+
+import (
+        "context"
+
+        "github.com/AwesomeXjs/iq-progress/internal/config"
+        "github.com/AwesomeXjs/iq-progress/internal/handler"
+        "github.com/AwesomeXjs/iq-progress/internal/repository"
+        "github.com/AwesomeXjs/iq-progress/internal/service"
+        "github.com/AwesomeXjs/iq-progress/pkg/closer"
+        "github.com/AwesomeXjs/iq-progress/pkg/dbClient"
+        "github.com/AwesomeXjs/iq-progress/pkg/dbClient/pg"
+        "github.com/AwesomeXjs/iq-progress/pkg/dbClient/transaction"
+        "github.com/AwesomeXjs/iq-progress/pkg/logger"
+        "go.uber.org/zap"
+)
+
+type ServiceProvider struct {
+        httpConfig *config.HTTPConfig
+        pgConfig   *config.PgConfig
+
+        dbClient  dbClient.Client
+        txManager dbClient.TxManager
+
+        handler    *handler.Handler
+        service    service.IService
+        repository repository.IRepository
+}
+
+func NewServiceProvider() *ServiceProvider <span class="cov0" title="0">{
+        return &amp;ServiceProvider{}
+}</span>
+
+// HTTPConfig returns the HTTP configuration, initializing it if necessary.
+func (s *ServiceProvider) HTTPConfig() *config.HTTPConfig <span class="cov0" title="0">{
+        const mark = "App.ServiceProvider.HTTPConfig"
+
+        if s.httpConfig == nil </span><span class="cov0" title="0">{
+                cfg, err := config.NewHTTPConfig()
+                if err != nil </span><span class="cov0" title="0">{
+                        logger.Fatal("failed to get http config", mark, zap.Error(err))
+                }</span>
+                <span class="cov0" title="0">s.httpConfig = cfg</span>
+        }
+        <span class="cov0" title="0">return s.httpConfig</span>
+}
+
+// PGConfig initializes and returns the PostgresSQL configuration if not already set.
+func (s *ServiceProvider) PGConfig() *config.PgConfig <span class="cov0" title="0">{
+        const mark = "App.ServiceProvider.PGConfig"
+
+        if s.pgConfig == nil </span><span class="cov0" title="0">{
+                cfg, err := config.NewPgConfig()
+                if err != nil </span><span class="cov0" title="0">{
+                        logger.Fatal("failed to get pg config", mark, zap.Error(err))
+                }</span>
+                <span class="cov0" title="0">s.pgConfig = cfg</span>
+        }
+        <span class="cov0" title="0">return s.pgConfig</span>
+}
+
+// DBClient initializes and returns the database client if not already created.
+// It also pings the database to ensure the connection is valid.
+func (s *ServiceProvider) DBClient(ctx context.Context) dbClient.Client <span class="cov0" title="0">{
+        const mark = "App.ServiceProvider.DBClient"
+
+        if s.dbClient == nil </span><span class="cov0" title="0">{
+                cfg := s.PGConfig()
+                dbc, err := pg.New(ctx, cfg.GetDSN())
+                if err != nil </span><span class="cov0" title="0">{
+                        logger.Fatal("failed to get db client", mark, zap.Error(err))
+                }</span>
+
+                <span class="cov0" title="0">err = dbc.DB().Ping(ctx)
+                if err != nil </span><span class="cov0" title="0">{
+                        logger.Fatal("failed to ping db", mark, zap.Error(err))
+                }</span>
+
+                <span class="cov0" title="0">closer.Add(dbc.Close) // Ensures the database client is closed on shutdown
+                s.dbClient = dbc</span>
+        }
+        <span class="cov0" title="0">return s.dbClient</span>
+}
+
+func (s *ServiceProvider) InitTxManager(ctx context.Context) dbClient.TxManager <span class="cov0" title="0">{
+        if s.txManager == nil </span><span class="cov0" title="0">{
+                s.txManager = transaction.NewTransactionManager(s.DBClient(ctx).DB())
+        }</span>
+        <span class="cov0" title="0">return s.txManager</span>
+}
+
+func (s *ServiceProvider) InitRepository(ctx context.Context) repository.IRepository <span class="cov0" title="0">{
+        if s.repository == nil </span><span class="cov0" title="0">{
+                s.repository = repository.New(s.DBClient(ctx))
+        }</span>
+        <span class="cov0" title="0">return s.repository</span>
+}
+
+func (s *ServiceProvider) InitService(ctx context.Context) service.IService <span class="cov0" title="0">{
+        if s.service == nil </span><span class="cov0" title="0">{
+                s.service = service.New(s.InitRepository(ctx), s.InitTxManager(ctx))
+        }</span>
+        <span class="cov0" title="0">return s.service</span>
+}
+
+func (s *ServiceProvider) InitHandler(ctx context.Context) *handler.Handler <span class="cov0" title="0">{
+        if s.handler == nil </span><span class="cov0" title="0">{
+                s.handler = handler.New(s.InitService(ctx))
+        }</span>
+        <span class="cov0" title="0">return s.handler</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package converter
+
+import "github.com/AwesomeXjs/iq-progress/internal/model"
+
+func ToTxData(sender, receiver, amount int) *model.TxData <span class="cov0" title="0">{
+        return &amp;model.TxData{
+                Sender:   sender,
+                Receiver: receiver,
+                Amount:   amount,
+        }
+}</span>
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package handler
+
+import (
+        "net/http"
+        "strconv"
+
+        "github.com/AwesomeXjs/iq-progress/internal/model"
+        "github.com/AwesomeXjs/iq-progress/internal/utils"
+        "github.com/AwesomeXjs/iq-progress/pkg/logger"
+        "github.com/labstack/echo/v4"
+        "go.uber.org/zap"
+)
+
+// GetLastOperations - GetLastOperations
+// @Summary GetLastOperations
+// @Tags User
+// @Description get last operations for user
+// @ID GetLastOperations
+// @Accept  json
+// @Produce  json
+// @Param id path int false "user id"
+// @Success 200 {object} schema.GetOperationsSchema
+// @Failure 400 {object} utils.Body
+// @Failure 422 {object} utils.Body
+// @Failure 500 {object} utils.Body
+// @Router /api/v1/operations/{id} [get]
+func (h *Handler) GetLastOperations(ctx echo.Context) error <span class="cov0" title="0">{
+
+        const mark = "Handler.GetLastOperations"
+
+        id, err := strconv.Atoi(ctx.Param("id"))
+        if err != nil </span><span class="cov0" title="0">{
+                logger.Error("failed to parse id", mark, zap.Error(err))
+                return utils.Response(ctx, http.StatusBadRequest, "failed to bind request", nil)
+        }</span>
+
+        <span class="cov0" title="0">var operations []model.Operation
+
+        operations, err = h.svc.GetOperations(ctx.Request().Context(), id)
+        if err != nil </span><span class="cov0" title="0">{
+                return utils.Response(ctx, http.StatusInternalServerError, "failed to get operations", nil)
+        }</span>
+
+        <span class="cov0" title="0">return utils.Response(ctx, http.StatusOK, "success", operations)</span>
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package handler
+
+import (
+        "net/http"
+
+        "github.com/AwesomeXjs/iq-progress/internal/service"
+        "github.com/AwesomeXjs/iq-progress/internal/utils"
+        "github.com/labstack/echo/v4"
+        "github.com/pkg/errors"
+)
+
+// Handler handles the authentication and header-related operations.
+type Handler struct {
+        svc service.IService
+}
+
+// New creates a new instance of the Controller.
+// It takes an authentication client and a header helper as dependencies.
+func New(svc service.IService) *Handler <span class="cov0" title="0">{
+        return &amp;Handler{
+                svc: svc,
+        }
+}</span>
+
+func ErrorValidation(ctx echo.Context, err error) error <span class="cov0" title="0">{
+        switch </span>{
+        case errors.Is(err, utils.ErrNotEnoughBalance):<span class="cov0" title="0">
+                return utils.Response(ctx, http.StatusUnprocessableEntity, "not enough balance", nil)</span>
+        case errors.Is(err, utils.ErrUserNotFound):<span class="cov0" title="0">
+                return utils.Response(ctx, http.StatusNotFound, "user not found", nil)</span>
+        case errors.Is(err, utils.ErrSenderNotFound):<span class="cov0" title="0">
+                return utils.Response(ctx, http.StatusInternalServerError, "sender not found", nil)</span>
+        default:<span class="cov0" title="0">
+                return utils.Response(ctx, http.StatusBadRequest, "failed to remove from balance", err.Error())</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package handler
+
+import (
+        "net/http"
+
+        "github.com/AwesomeXjs/iq-progress/internal/model"
+        "github.com/AwesomeXjs/iq-progress/internal/utils"
+        "github.com/AwesomeXjs/iq-progress/pkg/logger"
+        "github.com/asaskevich/govalidator"
+        "github.com/labstack/echo/v4"
+        "go.uber.org/zap"
+)
+
+// MakeDeposit - MakeDeposit
+// @Summary MakeDeposit
+// @Tags User
+// @Description make deposit for user
+// @ID MakeDeposit
+// @Accept  json
+// @Produce  json
+// @Param input body model.DepositRequest true "deposit info"
+// @Success 200 {object} schema.OperationSuccessSchema
+// @Failure 400 {object} utils.Body
+// @Failure 422 {object} utils.Body
+// @Failure 500 {object} utils.Body
+// @Router /api/v1/deposit [post]
+func (h *Handler) MakeDeposit(ctx echo.Context) error <span class="cov0" title="0">{
+
+        const mark = "Handler.MakeDeposit"
+
+        var Request model.DepositRequest
+        if err := ctx.Bind(&amp;Request); err != nil </span><span class="cov0" title="0">{
+                logger.Error("failed to bind request", mark, zap.Error(err))
+                return utils.Response(ctx, http.StatusBadRequest, "failed to bind request", nil)
+        }</span>
+
+        <span class="cov0" title="0">_, err := govalidator.ValidateStruct(Request)
+        if err != nil </span><span class="cov0" title="0">{
+                logger.Error("failed to validate request", mark, zap.Error(err))
+                return utils.Response(ctx, http.StatusUnprocessableEntity, "failed to validate request", err.Error())
+        }</span>
+
+        <span class="cov0" title="0">balance, err := h.svc.MakeDeposit(ctx.Request().Context(), Request)
+        if err != nil </span><span class="cov0" title="0">{
+                return ErrorValidation(ctx, err)
+        }</span>
+
+        <span class="cov0" title="0">return utils.Response(ctx, http.StatusOK, "success", balance)</span>
+}
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package handler
+
+import (
+        _ "github.com/AwesomeXjs/iq-progress/docs"
+
+        "github.com/labstack/echo/v4"
+        echoSwagger "github.com/swaggo/echo-swagger"
+)
+
+const (
+        version1 = "/v1"
+        baseBath = "/api"
+)
+
+// InitRoutes initializes all the routes for the application.
+func (h *Handler) InitRoutes(server *echo.Echo) <span class="cov0" title="0">{
+        server.GET("/swagger/*", echoSwagger.WrapHandler)
+
+        api := server.Group(baseBath)
+        </span><span class="cov0" title="0">{
+                v1 := api.Group(version1)
+                </span><span class="cov0" title="0">{
+                        v1.POST("/send", h.Send)
+                        v1.GET("/operations/:id", h.GetLastOperations)
+                        v1.POST("/deposit", h.MakeDeposit)
+                }</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package handler
+
+import (
+        "net/http"
+
+        "github.com/AwesomeXjs/iq-progress/internal/model"
+        "github.com/AwesomeXjs/iq-progress/internal/utils"
+        "github.com/AwesomeXjs/iq-progress/pkg/logger"
+        "github.com/asaskevich/govalidator"
+        "github.com/labstack/echo/v4"
+        "go.uber.org/zap"
+)
+
+// Send - Send
+// @Summary Send
+// @Tags User
+// @Description send money to another user
+// @ID Send
+// @Accept  json
+// @Produce  json
+// @Param input body model.SendRequest true "data"
+// @Success 200 {object} schema.OperationSuccessSchema
+// @Failure 400 {object} utils.Body
+// @Failure 422 {object} utils.Body
+// @Failure 500 {object} utils.Body
+// @Router /api/v1/send [post]
+func (h *Handler) Send(ctx echo.Context) error <span class="cov0" title="0">{
+
+        const mark = "Handler.Send"
+
+        var Request model.SendRequest
+
+        if err := ctx.Bind(&amp;Request); err != nil </span><span class="cov0" title="0">{
+                logger.Error("failed to bind request", mark, zap.Error(err))
+                return utils.Response(ctx, http.StatusBadRequest, "failed to bind request", nil)
+        }</span>
+
+        <span class="cov0" title="0">_, err := govalidator.ValidateStruct(Request)
+        if err != nil </span><span class="cov0" title="0">{
+
+                logger.Error("failed to validate request", mark, zap.Error(err))
+                return utils.Response(ctx, http.StatusUnprocessableEntity, "failed to validate request", err.Error())
+        }</span>
+
+        <span class="cov0" title="0">balance, err := h.svc.Send(ctx.Request().Context(), Request)
+        if err != nil </span><span class="cov0" title="0">{
+                return ErrorValidation(ctx, err)
+        }</span>
+
+        <span class="cov0" title="0">return utils.Response(ctx, http.StatusOK, "success", balance)</span>
+}
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">package middlewares
+
+import (
+        "time"
+
+        "github.com/AwesomeXjs/iq-progress/pkg/logger"
+        "github.com/labstack/echo/v4"
+        "go.uber.org/zap"
+)
+
+// Logger is a middleware that logs details of each HTTP request.
+// It logs the request method, path, and duration. In case of an error, it also logs the error details.
+func Logger(next echo.HandlerFunc) echo.HandlerFunc <span class="cov0" title="0">{
+        const mark = "Middleware.Logger"
+        return func(c echo.Context) error </span><span class="cov0" title="0">{
+                r := c.Request()
+                start := time.Now()
+
+                err := next(c)
+
+                if err != nil </span><span class="cov0" title="0">{
+                        logger.Error("Failed to process request",
+                                mark,
+                                zap.Error(err),
+                                zap.String("method", r.Method),
+                                zap.String("path", r.URL.Path),
+                                zap.Duration("duration", time.Since(start)))
+                }</span>
+
+                <span class="cov0" title="0">logger.Info("Request details",
+                        mark,
+                        zap.String("method", r.Method),
+                        zap.String("path", r.URL.Path),
+                        zap.Duration("duration", time.Since(start)),
+                )
+
+                return err</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">package repository
+
+import (
+        "context"
+        "strings"
+
+        "github.com/AwesomeXjs/iq-progress/internal/utils"
+        "github.com/AwesomeXjs/iq-progress/pkg/dbClient"
+        "github.com/AwesomeXjs/iq-progress/pkg/logger"
+        sq "github.com/Masterminds/squirrel"
+        "go.uber.org/zap"
+)
+
+func (r *Repository) AddToBalance(ctx context.Context, userID int, amount int) (int, error) <span class="cov0" title="0">{
+
+        const mark = "Repository.AddToBalance"
+
+        updateBuilder := sq.Update(UserTable).
+                PlaceholderFormat(sq.Dollar).
+                Where(sq.Eq{IDColumn: userID}).
+                Set(BalanceColumn, sq.Expr("balance + ?", amount)).
+                Suffix(ReturnBalanceColumn)
+
+        query, args, err := updateBuilder.ToSql()
+        if err != nil </span><span class="cov0" title="0">{
+                logger.Error("failed to build query", mark, zap.Error(err))
+                return 0, err
+        }</span>
+
+        <span class="cov0" title="0">q := dbClient.Query{
+                Name:     "AddToBalance",
+                QueryRaw: query,
+        }
+
+        var balance int
+        err = r.db.DB().ScanOneContext(ctx, &amp;balance, q, args...)
+        if err != nil </span><span class="cov0" title="0">{
+                if strings.Contains(err.Error(), "no rows in result set") </span><span class="cov0" title="0">{
+                        return 0, utils.ErrUserNotFound
+                }</span>
+                <span class="cov0" title="0">logger.Error("failed to execute query", mark, zap.Error(err))
+                return 0, err</span>
+        }
+
+        <span class="cov0" title="0">return balance, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">package repository
+
+import (
+        "context"
+
+        "github.com/AwesomeXjs/iq-progress/internal/model"
+        "github.com/AwesomeXjs/iq-progress/pkg/dbClient"
+        sq "github.com/Masterminds/squirrel"
+)
+
+func (r *Repository) AddTransaction(ctx context.Context, data *model.TxData, txType string) error <span class="cov0" title="0">{
+        insertBuilder := sq.Insert(TransactionTable).
+                PlaceholderFormat(sq.Dollar).
+                Columns(FromUserIDColumn, ToUserIDColumn, AmountColumn, TypeColumn).
+                Values(data.Sender, data.Receiver, data.Amount, txType)
+
+        query, args, err := insertBuilder.ToSql()
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov0" title="0">q := dbClient.Query{
+                Name:     "AddTransaction",
+                QueryRaw: query,
+        }
+
+        _, err = r.db.DB().ExecContext(ctx, q, args...)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">package repository
+
+import (
+        "context"
+
+        "github.com/AwesomeXjs/iq-progress/internal/model"
+        "github.com/AwesomeXjs/iq-progress/pkg/dbClient"
+        "github.com/AwesomeXjs/iq-progress/pkg/logger"
+        sq "github.com/Masterminds/squirrel"
+        "go.uber.org/zap"
+)
+
+func (r *Repository) GetOperations(ctx context.Context, userID int) ([]model.Operation, error) <span class="cov0" title="0">{
+
+        const mark = "Repository.GetOperations"
+
+        builder := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
+
+        queryBuilder := builder.
+                Select(TxID, SenderID, SenderUsername, ReceiverID,
+                        ReceiverUsername, TxType, TxAmount, TxDate,
+                ).
+                From(TxTable).
+                LeftJoin(U1+" ON t.from_user_id = u1.id").
+                LeftJoin(U2+" ON t.to_user_id = u2.id").
+                Where("(t.from_user_id = ? OR t.to_user_id = ?)", userID, userID).
+                OrderBy(TxDate + " DESC").
+                Limit(10)
+
+        query, args, err := queryBuilder.ToSql()
+        if err != nil </span><span class="cov0" title="0">{
+                logger.Error("failed to build query", mark, zap.Error(err))
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">q := dbClient.Query{
+                Name:     "GetOperations",
+                QueryRaw: query,
+        }
+
+        var operations []model.Operation
+
+        err = r.db.DB().ScanAllContext(ctx, &amp;operations, q, args...)
+        if err != nil </span><span class="cov0" title="0">{
+                logger.Error("failed to execute query", mark, zap.Error(err))
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return operations, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package repository
+
+import (
+        "context"
+
+        "github.com/AwesomeXjs/iq-progress/internal/model"
+        "github.com/AwesomeXjs/iq-progress/pkg/dbClient"
+)
+
+type IRepository interface {
+        AddToBalance(ctx context.Context, userID int, amount int) (int, error)
+        RemoveFromBalance(ctx context.Context, userID int, amount int) (int, error)
+        AddTransaction(ctx context.Context, data *model.TxData, txType string) error
+        GetOperations(ctx context.Context, userID int) ([]model.Operation, error)
+}
+
+type Repository struct {
+        db dbClient.Client
+}
+
+func New(db dbClient.Client) IRepository <span class="cov0" title="0">{
+        return &amp;Repository{
+                db: db,
+        }
+}</span>
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">package repository
+
+import (
+        "context"
+        "strings"
+
+        "github.com/AwesomeXjs/iq-progress/internal/utils"
+        "github.com/AwesomeXjs/iq-progress/pkg/dbClient"
+        "github.com/AwesomeXjs/iq-progress/pkg/logger"
+        sq "github.com/Masterminds/squirrel"
+        "go.uber.org/zap"
+)
+
+func (r *Repository) RemoveFromBalance(ctx context.Context, userID int, amount int) (int, error) <span class="cov0" title="0">{
+
+        const mark = "Repository.RemoveFromBalance"
+
+        updateBuilder := sq.Update(UserTable).
+                PlaceholderFormat(sq.Dollar).
+                Where(sq.Eq{IDColumn: userID}).
+                Set(BalanceColumn, sq.Expr("balance - ?", amount)).
+                Suffix(ReturnBalanceColumn)
+
+        query, args, err := updateBuilder.ToSql()
+        if err != nil </span><span class="cov0" title="0">{
+                logger.Error("failed to build query", mark, zap.Error(err))
+                return 0, err
+        }</span>
+
+        <span class="cov0" title="0">q := dbClient.Query{
+                Name:     "RemoveFromBalance",
+                QueryRaw: query,
+        }
+
+        var balance int
+        err = r.db.DB().ScanOneContext(ctx, &amp;balance, q, args...)
+        if err != nil </span><span class="cov0" title="0">{
+                if strings.Contains(err.Error(), "no rows in result set") </span><span class="cov0" title="0">{
+                        return 0, utils.ErrSenderNotFound
+                }</span>
+                <span class="cov0" title="0">logger.Error("failed to execute query", mark, zap.Error(err))
+                return 0, err</span>
+        }
+
+        <span class="cov0" title="0">if balance &lt; 0 </span><span class="cov0" title="0">{
+                return 0, utils.ErrNotEnoughBalance
+        }</span>
+
+        <span class="cov0" title="0">return balance, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file14" style="display: none">package service
+
+import (
+        "context"
+
+        "github.com/AwesomeXjs/iq-progress/internal/model"
+)
+
+func (s *Service) GetOperations(ctx context.Context, userID int) ([]model.Operation, error) <span class="cov10" title="10">{
+        return s.Repo.GetOperations(ctx, userID)
+}</span>
+</pre>
+		
+		<pre class="file" id="file15" style="display: none">package service
+
+import (
+        "context"
+
+        "github.com/AwesomeXjs/iq-progress/internal/model"
+        "github.com/AwesomeXjs/iq-progress/internal/repository"
+        "github.com/AwesomeXjs/iq-progress/pkg/dbClient"
+)
+
+type IService interface {
+        Send(ctx context.Context, request model.SendRequest) (int, error)
+        MakeDeposit(ctx context.Context, request model.DepositRequest) (int, error)
+        GetOperations(ctx context.Context, userID int) ([]model.Operation, error)
+}
+
+type Service struct {
+        Repo      repository.IRepository
+        TxManager dbClient.TxManager
+}
+
+func New(repo repository.IRepository, txManager dbClient.TxManager) IService <span class="cov10" title="10">{
+        return &amp;Service{
+                Repo:      repo,
+                TxManager: txManager,
+        }
+}</span>
+</pre>
+		
+		<pre class="file" id="file16" style="display: none">package service
+
+import (
+        "context"
+
+        "github.com/AwesomeXjs/iq-progress/internal/converter"
+        "github.com/AwesomeXjs/iq-progress/internal/model"
+        "github.com/AwesomeXjs/iq-progress/pkg/logger"
+        "go.uber.org/zap"
+)
+
+func (s *Service) MakeDeposit(ctx context.Context, request model.DepositRequest) (int, error) <span class="cov0" title="0">{
+
+        const mark = "Service.MakeDeposit"
+
+        var balance int
+        err := s.TxManager.ReadCommitted(ctx, func(ctx context.Context) error </span><span class="cov0" title="0">{
+                var errTx error
+
+                balance, errTx = s.Repo.AddToBalance(ctx, request.UserID, request.Amount)
+                if errTx != nil </span><span class="cov0" title="0">{
+                        logger.Error("failed to add to balance", mark, zap.Error(errTx))
+                        return errTx
+                }</span>
+
+                <span class="cov0" title="0">errTx = s.Repo.AddTransaction(ctx,
+                        converter.ToTxData(
+                                request.UserID,
+                                request.UserID,
+                                request.Amount),
+                        "deposit")
+                if errTx != nil </span><span class="cov0" title="0">{
+                        logger.Error("failed to add transaction", mark, zap.Error(errTx))
+                        return errTx
+                }</span>
+
+                <span class="cov0" title="0">return nil</span>
+        })
+        <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                logger.Error("failed to execute transaction", mark, zap.Error(err))
+                return 0, err
+        }</span>
+
+        <span class="cov0" title="0">return balance, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file17" style="display: none">package service
+
+import (
+        "context"
+
+        "github.com/AwesomeXjs/iq-progress/internal/converter"
+        "github.com/AwesomeXjs/iq-progress/internal/model"
+        "github.com/AwesomeXjs/iq-progress/pkg/logger"
+        "go.uber.org/zap"
+)
+
+func (s *Service) Send(ctx context.Context, request model.SendRequest) (int, error) <span class="cov10" title="10">{
+
+        const mark = "Service.Send"
+
+        var balance int
+        err := s.TxManager.ReadCommitted(ctx, func(ctx context.Context) error </span><span class="cov0" title="0">{
+                var errTx error
+
+                _, errTx = s.Repo.AddToBalance(ctx, request.Receiver, request.Amount)
+                if errTx != nil </span><span class="cov0" title="0">{
+                        logger.Error("failed to add to balance", mark, zap.Error(errTx))
+                        return errTx
+                }</span>
+
+                <span class="cov0" title="0">balance, errTx = s.Repo.RemoveFromBalance(ctx, request.Sender, request.Amount)
+                if errTx != nil </span><span class="cov0" title="0">{
+                        logger.Error("failed to remove from balance", mark, zap.Error(errTx))
+                        return errTx
+                }</span>
+
+                <span class="cov0" title="0">errTx = s.Repo.AddTransaction(ctx, converter.ToTxData(
+                        request.Sender,
+                        request.Receiver,
+                        request.Amount),
+                        "transfer")
+                if errTx != nil </span><span class="cov0" title="0">{
+                        logger.Error("failed to add transaction", mark, zap.Error(errTx))
+                        return errTx
+                }</span>
+
+                <span class="cov0" title="0">return nil</span>
+        })
+        <span class="cov10" title="10">if err != nil </span><span class="cov7" title="5">{
+                logger.Error("failed to execute transaction", mark, zap.Error(err))
+                return 0, err
+        }</span>
+
+        <span class="cov7" title="5">return balance, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file18" style="display: none">package utils
+
+import (
+        "time"
+
+        "github.com/AwesomeXjs/iq-progress/pkg/logger"
+        "github.com/labstack/echo/v4"
+        "go.uber.org/zap"
+)
+
+const (
+        SuccessMessage = "success"
+)
+
+// Body struct defines the structure of the response body.
+// It includes a title, detail about the error or message, the request URI, and the current time.
+type Body struct {
+        Title   string `json:"title"`
+        Data    any    `json:"data"`
+        Request string `json:"request"`
+        Time    string `json:"time"`
+}
+
+// Response is a utility function to send JSON responses.
+// It accepts the HTTP context, a status code, a message, and detailed information to send in the response.
+func Response(ctx echo.Context, statusCode int, message string, data interface{}) error <span class="cov0" title="0">{
+        const mark = "Response Wrapper"
+        // Construct the response object using the provided parameters.
+        err := ctx.JSON(statusCode, Body{
+                Title:   message,
+                Data:    data,
+                Request: ctx.Request().RequestURI,
+                Time:    time.Now().Format("2006-01-02 15:04:05"),
+        })
+
+        // If there's an error in writing the response, log it and return the error.
+        if err != nil </span><span class="cov0" title="0">{
+                logger.Error("failed to write response", mark, zap.String("error", err.Error()))
+                return err
+        }</span>
+
+        // Return nil indicating that the response was successfully written.
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

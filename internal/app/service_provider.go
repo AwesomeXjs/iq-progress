@@ -8,25 +8,29 @@ import (
 	"github.com/AwesomeXjs/iq-progress/internal/repository"
 	"github.com/AwesomeXjs/iq-progress/internal/service"
 	"github.com/AwesomeXjs/iq-progress/pkg/closer"
-	"github.com/AwesomeXjs/iq-progress/pkg/dbClient"
-	"github.com/AwesomeXjs/iq-progress/pkg/dbClient/pg"
-	"github.com/AwesomeXjs/iq-progress/pkg/dbClient/transaction"
+	"github.com/AwesomeXjs/iq-progress/pkg/dbclient"
+	"github.com/AwesomeXjs/iq-progress/pkg/dbclient/pg"
+	"github.com/AwesomeXjs/iq-progress/pkg/dbclient/transaction"
 	"github.com/AwesomeXjs/iq-progress/pkg/logger"
 	"go.uber.org/zap"
 )
 
+// ServiceProvider manages the initialization and lifecycle of various components
+// in the application, including the HTTP config, Postgres config, DB client, transaction manager,
+// repository, service, and handler.
 type ServiceProvider struct {
 	httpConfig *config.HTTPConfig
 	pgConfig   *config.PgConfig
 
-	dbClient  dbClient.Client
-	txManager dbClient.TxManager
+	dbClient  dbclient.Client
+	txManager dbclient.TxManager
 
 	handler    *handler.Handler
 	service    service.IService
 	repository repository.IRepository
 }
 
+// NewServiceProvider creates a new instance of ServiceProvider.
 func NewServiceProvider() *ServiceProvider {
 	return &ServiceProvider{}
 }
@@ -61,7 +65,7 @@ func (s *ServiceProvider) PGConfig() *config.PgConfig {
 
 // DBClient initializes and returns the database client if not already created.
 // It also pings the database to ensure the connection is valid.
-func (s *ServiceProvider) DBClient(ctx context.Context) dbClient.Client {
+func (s *ServiceProvider) DBClient(ctx context.Context) dbclient.Client {
 	const mark = "App.ServiceProvider.DBClient"
 
 	if s.dbClient == nil {
@@ -82,13 +86,15 @@ func (s *ServiceProvider) DBClient(ctx context.Context) dbClient.Client {
 	return s.dbClient
 }
 
-func (s *ServiceProvider) InitTxManager(ctx context.Context) dbClient.TxManager {
+// InitTxManager initializes and returns the transaction manager if not already created.
+func (s *ServiceProvider) InitTxManager(ctx context.Context) dbclient.TxManager {
 	if s.txManager == nil {
 		s.txManager = transaction.NewTransactionManager(s.DBClient(ctx).DB())
 	}
 	return s.txManager
 }
 
+// InitRepository initializes and returns the repository if not already created.
 func (s *ServiceProvider) InitRepository(ctx context.Context) repository.IRepository {
 	if s.repository == nil {
 		s.repository = repository.New(s.DBClient(ctx))
@@ -96,6 +102,7 @@ func (s *ServiceProvider) InitRepository(ctx context.Context) repository.IReposi
 	return s.repository
 }
 
+// InitService initializes and returns the service if not already created.
 func (s *ServiceProvider) InitService(ctx context.Context) service.IService {
 	if s.service == nil {
 		s.service = service.New(s.InitRepository(ctx), s.InitTxManager(ctx))
@@ -103,6 +110,7 @@ func (s *ServiceProvider) InitService(ctx context.Context) service.IService {
 	return s.service
 }
 
+// InitHandler initializes and returns the handler if not already created.
 func (s *ServiceProvider) InitHandler(ctx context.Context) *handler.Handler {
 	if s.handler == nil {
 		s.handler = handler.New(s.InitService(ctx))

@@ -3,18 +3,18 @@ package pg
 import (
 	"context"
 
-	"github.com/AwesomeXjs/iq-progress/pkg/dbClient"
+	"github.com/AwesomeXjs/iq-progress/pkg/dbclient"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/pkg/errors"
 )
 
 // Client - db client struct
 type pgClient struct {
-	masterDBC dbClient.DB
+	masterDBC dbclient.DB
 }
 
 // New - create new db client with pgxpool.Connect
-func New(ctx context.Context, dsn string) (dbClient.Client, error) {
+func New(ctx context.Context, dsn string) (dbclient.Client, error) {
 	dbc, err := pgxpool.Connect(ctx, dsn)
 	if err != nil {
 		return nil, errors.Errorf("failed to connect to db: %v", err)
@@ -26,7 +26,7 @@ func New(ctx context.Context, dsn string) (dbClient.Client, error) {
 }
 
 // DB - returning db
-func (c *pgClient) DB() dbClient.DB {
+func (c *pgClient) DB() dbclient.DB {
 	return c.masterDBC
 }
 

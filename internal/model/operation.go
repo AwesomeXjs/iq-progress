@@ -2,6 +2,7 @@ package model
 
 import "time"
 
+// Operation represents a financial transaction between two users.
 type Operation struct {
 	ID               int       `json:"id" db:"transaction_id"`
 	FromUserID       int       `json:"from_user_id" db:"sender_id"`
@@ -13,12 +14,14 @@ type Operation struct {
 	CreatedAt        time.Time `json:"transaction_date" db:"transaction_date"`
 }
 
+// SendRequest represents a request to send money between users.
 type SendRequest struct {
 	Sender   int `json:"sender" valid:"required" example:"1"`
 	Receiver int `json:"receiver" valid:"required" example:"2"`
 	Amount   int `json:"amount" valid:"required,range(1|100000000)" example:"100"`
 }
 
+// DepositRequest represents a request to deposit money into a user's account.
 type DepositRequest struct {
 	UserID int `json:"user_id" valid:"required" example:"1"`
 	Amount int `json:"amount" valid:"required,range(1|100000000)" example:"1000"`

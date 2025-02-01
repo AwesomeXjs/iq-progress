@@ -9,21 +9,22 @@ import (
 	"go.uber.org/zap"
 )
 
+// MakeDeposit handles adding funds to a user's balance.
 func (s *Service) MakeDeposit(ctx context.Context, request model.DepositRequest) (int, error) {
 
 	const mark = "Service.MakeDeposit"
 
 	var balance int
-	err := s.txManager.ReadCommitted(ctx, func(ctx context.Context) error {
+	err := s.TxManager.ReadCommitted(ctx, func(ctx context.Context) error {
 		var errTx error
 
-		balance, errTx = s.repo.AddToBalance(ctx, request.UserID, request.Amount)
+		balance, errTx = s.Repo.AddToBalance(ctx, request.UserID, request.Amount)
 		if errTx != nil {
 			logger.Error("failed to add to balance", mark, zap.Error(errTx))
 			return errTx
 		}
 
-		errTx = s.repo.AddTransaction(ctx,
+		errTx = s.Repo.AddTransaction(ctx,
 			converter.ToTxData(
 				request.UserID,
 				request.UserID,

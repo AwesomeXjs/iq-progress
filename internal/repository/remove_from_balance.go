@@ -5,14 +5,14 @@ import (
 	"strings"
 
 	"github.com/AwesomeXjs/iq-progress/internal/utils"
-	"github.com/AwesomeXjs/iq-progress/pkg/dbClient"
+	"github.com/AwesomeXjs/iq-progress/pkg/dbclient"
 	"github.com/AwesomeXjs/iq-progress/pkg/logger"
 	sq "github.com/Masterminds/squirrel"
 	"go.uber.org/zap"
 )
 
+// RemoveFromBalance removes a specified amount from a user's balance and returns the updated balance.
 func (r *Repository) RemoveFromBalance(ctx context.Context, userID int, amount int) (int, error) {
-
 	const mark = "Repository.RemoveFromBalance"
 
 	updateBuilder := sq.Update(UserTable).
@@ -27,7 +27,7 @@ func (r *Repository) RemoveFromBalance(ctx context.Context, userID int, amount i
 		return 0, err
 	}
 
-	q := dbClient.Query{
+	q := dbclient.Query{
 		Name:     "RemoveFromBalance",
 		QueryRaw: query,
 	}

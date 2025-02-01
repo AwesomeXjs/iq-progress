@@ -22,6 +22,7 @@ func New(svc service.IService) *Handler {
 	}
 }
 
+// ErrorValidation handles the error response based on the error type.
 func ErrorValidation(ctx echo.Context, err error) error {
 	switch {
 	case errors.Is(err, utils.ErrNotEnoughBalance):

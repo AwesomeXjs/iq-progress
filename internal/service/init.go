@@ -5,23 +5,26 @@ import (
 
 	"github.com/AwesomeXjs/iq-progress/internal/model"
 	"github.com/AwesomeXjs/iq-progress/internal/repository"
-	"github.com/AwesomeXjs/iq-progress/pkg/dbClient"
+	"github.com/AwesomeXjs/iq-progress/pkg/dbclient"
 )
 
+// IService defines the interface for transaction-related operations.
 type IService interface {
 	Send(ctx context.Context, request model.SendRequest) (int, error)
 	MakeDeposit(ctx context.Context, request model.DepositRequest) (int, error)
 	GetOperations(ctx context.Context, userID int) ([]model.Operation, error)
 }
 
+// Service implements IService and handles business logic.
 type Service struct {
-	repo      repository.IRepository
-	txManager dbClient.TxManager
+	Repo      repository.IRepository
+	TxManager dbclient.TxManager
 }
 
-func New(repo repository.IRepository, txManager dbClient.TxManager) IService {
+// New creates a new Service instance.
+func New(repo repository.IRepository, txManager dbclient.TxManager) IService {
 	return &Service{
-		repo:      repo,
-		txManager: txManager,
+		Repo:      repo,
+		TxManager: txManager,
 	}
 }

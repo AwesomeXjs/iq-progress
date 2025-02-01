@@ -9,41 +9,32 @@ import (
 	"go.uber.org/zap"
 )
 
+// Send processes a money transfer between users.
 func (s *Service) Send(ctx context.Context, request model.SendRequest) (int, error) {
 
 	const mark = "Service.Send"
 
 	var balance int
-	err := s.txManager.ReadCommitted(ctx, func(ctx context.Context) error {
+	err := s.TxManager.ReadCommitted(ctx, func(ctx context.Context) error {
 		var errTx error
 
-		_, errTx = s.repo.AddToBalance(ctx, request.Receiver, request.Amount)
+		_, errTx = s.Repo.AddToBalance(ctx, request.Receiver, request.Amount)
 		if errTx != nil {
 			logger.Error("failed to add to balance", mark, zap.Error(errTx))
 			return errTx
 		}
 
-		balance, errTx = s.repo.RemoveFromBalance(ctx, request.Sender, request.Amount)
+		balance, errTx = s.Repo.RemoveFromBalance(ctx, request.Sender, request.Amount)
 		if errTx != nil {
 			logger.Error("failed to remove from balance", mark, zap.Error(errTx))
 			return errTx
 		}
 
-		errTx = s.repo.AddTransaction(ctx, converter.ToTxData(
+		errTx = s.Repo.AddTransaction(ctx, converter.ToTxData(
 			request.Sender,
 			request.Receiver,
 			request.Amount),
-			"send")
-		if errTx != nil {
-			logger.Error("failed to add transaction", mark, zap.Error(errTx))
-			return errTx
-		}
-
-		errTx = s.repo.AddTransaction(ctx, converter.ToTxData(
-			request.Sender,
-			request.Receiver,
-			request.Amount),
-			"receive")
+			"transfer")
 		if errTx != nil {
 			logger.Error("failed to add transaction", mark, zap.Error(errTx))
 			return errTx

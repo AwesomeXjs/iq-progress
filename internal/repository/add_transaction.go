@@ -4,10 +4,11 @@ import (
 	"context"
 
 	"github.com/AwesomeXjs/iq-progress/internal/model"
-	"github.com/AwesomeXjs/iq-progress/pkg/dbClient"
+	"github.com/AwesomeXjs/iq-progress/pkg/dbclient"
 	sq "github.com/Masterminds/squirrel"
 )
 
+// AddTransaction adds a new transaction record to the database with the specified data and transaction type.
 func (r *Repository) AddTransaction(ctx context.Context, data *model.TxData, txType string) error {
 	insertBuilder := sq.Insert(TransactionTable).
 		PlaceholderFormat(sq.Dollar).
@@ -19,7 +20,7 @@ func (r *Repository) AddTransaction(ctx context.Context, data *model.TxData, txT
 		return err
 	}
 
-	q := dbClient.Query{
+	q := dbclient.Query{
 		Name:     "AddTransaction",
 		QueryRaw: query,
 	}
