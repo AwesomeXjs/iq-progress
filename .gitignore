@@ -1,4 +1,5 @@
 .idea
 .env
 bin
-logs/coverage.out
+logs
+coverage.out
