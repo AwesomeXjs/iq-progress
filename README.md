@@ -12,8 +12,7 @@
 1. **Клонируйте репозиторий:**
 
    ```bash
-   git clone https://github.com/yourusername/yourproject.git
-   cd yourproject
+   git clone https://github.com/AwesomeXjs/iq-progress.git
 
 2. **Запуск проекта:**
      ```bash
