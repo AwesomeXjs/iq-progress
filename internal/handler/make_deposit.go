@@ -11,6 +11,19 @@ import (
 	"go.uber.org/zap"
 )
 
+// MakeDeposit - MakeDeposit
+// @Summary MakeDeposit
+// @Tags User
+// @Description make deposit for user
+// @ID MakeDeposit
+// @Accept  json
+// @Produce  json
+// @Param input body model.DepositRequest true "deposit info"
+// @Success 200 {object} schema.OperationSuccessSchema
+// @Failure 400 {object} utils.Body
+// @Failure 422 {object} utils.Body
+// @Failure 500 {object} utils.Body
+// @Router /api/v1/deposit [post]
 func (h *Handler) MakeDeposit(ctx echo.Context) error {
 
 	const mark = "Handler.MakeDeposit"

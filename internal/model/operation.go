@@ -2,7 +2,7 @@ package model
 
 import "time"
 
-type Operations struct {
+type Operation struct {
 	ID               int       `json:"id" db:"transaction_id"`
 	FromUserID       int       `json:"from_user_id" db:"sender_id"`
 	SenderUsername   string    `json:"sender_username" db:"sender_username"`
@@ -14,12 +14,12 @@ type Operations struct {
 }
 
 type SendRequest struct {
-	Sender   int `json:"sender" valid:"required"`
-	Receiver int `json:"receiver" valid:"required"`
-	Amount   int `json:"amount" valid:"required,range(1|100000000)"`
+	Sender   int `json:"sender" valid:"required" example:"1"`
+	Receiver int `json:"receiver" valid:"required" example:"2"`
+	Amount   int `json:"amount" valid:"required,range(1|100000000)" example:"100"`
 }
 
 type DepositRequest struct {
-	UserID int `json:"user_id" valid:"required"`
-	Amount int `json:"amount" valid:"required,range(1|100000000)"`
+	UserID int `json:"user_id" valid:"required" example:"1"`
+	Amount int `json:"amount" valid:"required,range(1|100000000)" example:"1000"`
 }

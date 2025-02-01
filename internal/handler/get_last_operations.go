@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -12,8 +11,20 @@ import (
 	"go.uber.org/zap"
 )
 
+// GetLastOperations - GetLastOperations
+// @Summary GetLastOperations
+// @Tags User
+// @Description get last operations for user
+// @ID GetLastOperations
+// @Accept  json
+// @Produce  json
+// @Param id path int false "user id"
+// @Success 200 {object} schema.GetOperationsSchema
+// @Failure 400 {object} utils.Body
+// @Failure 422 {object} utils.Body
+// @Failure 500 {object} utils.Body
+// @Router /api/v1/operations/{id} [get]
 func (h *Handler) GetLastOperations(ctx echo.Context) error {
-	fmt.Println("YO")
 
 	const mark = "Handler.GetLastOperations"
 
@@ -23,7 +34,7 @@ func (h *Handler) GetLastOperations(ctx echo.Context) error {
 		return utils.Response(ctx, http.StatusBadRequest, "failed to bind request", nil)
 	}
 
-	var operations []model.Operations
+	var operations []model.Operation
 
 	operations, err = h.svc.GetOperations(ctx.Request().Context(), id)
 	if err != nil {

@@ -11,6 +11,19 @@ import (
 	"go.uber.org/zap"
 )
 
+// Send - Send
+// @Summary Send
+// @Tags User
+// @Description send money to another user
+// @ID Send
+// @Accept  json
+// @Produce  json
+// @Param input body model.SendRequest true "data"
+// @Success 200 {object} schema.OperationSuccessSchema
+// @Failure 400 {object} utils.Body
+// @Failure 422 {object} utils.Body
+// @Failure 500 {object} utils.Body
+// @Router /api/v1/send [post]
 func (h *Handler) Send(ctx echo.Context) error {
 
 	const mark = "Handler.Send"

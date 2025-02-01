@@ -8,6 +8,11 @@ import (
 	"go.uber.org/zap"
 )
 
+// @title Banking API
+// @version 1.0
+// @description REST API Server for money transfer
+// @host localhost:8080
+// @BasePath /
 func main() {
 
 	const mark = "main"

@@ -34,7 +34,7 @@ lint:
 	$(LOCAL_BIN)/golangci-lint run ./... --config .golangci.pipeline.yaml
 
 swagger:
-	$(LOCAL_BIN)/swag init -g cmd/app/main.go
+	$(LOCAL_BIN)/swag init -g cmd/main.go
 
 LOCAL_MIGRATION_DIR=$(CURDIR)/internal/migrations
 LOCAL_MIGRATION_DSN="host=$(POSTGRES_HOST) port=$(POSTGRES_PORT) dbname=$(POSTGRES_DB) user=$(POSTGRES_USER) password=$(POSTGRES_PASSWORD) sslmode=disable"

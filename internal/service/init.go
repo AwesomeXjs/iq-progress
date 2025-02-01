@@ -11,7 +11,7 @@ import (
 type IService interface {
 	Send(ctx context.Context, request model.SendRequest) (int, error)
 	MakeDeposit(ctx context.Context, request model.DepositRequest) (int, error)
-	GetOperations(ctx context.Context, userID int) ([]model.Operations, error)
+	GetOperations(ctx context.Context, userID int) ([]model.Operation, error)
 }
 
 type Service struct {

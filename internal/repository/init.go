@@ -11,7 +11,7 @@ type IRepository interface {
 	AddToBalance(ctx context.Context, userID int, amount int) (int, error)
 	RemoveFromBalance(ctx context.Context, userID int, amount int) (int, error)
 	AddTransaction(ctx context.Context, data *model.TxData, txType string) error
-	GetOperations(ctx context.Context, userID int) ([]model.Operations, error)
+	GetOperations(ctx context.Context, userID int) ([]model.Operation, error)
 }
 
 type Repository struct {

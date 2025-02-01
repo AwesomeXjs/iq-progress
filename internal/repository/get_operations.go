@@ -10,7 +10,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func (r *Repository) GetOperations(ctx context.Context, userID int) ([]model.Operations, error) {
+func (r *Repository) GetOperations(ctx context.Context, userID int) ([]model.Operation, error) {
 
 	const mark = "Repository.GetOperations"
 
@@ -45,7 +45,7 @@ func (r *Repository) GetOperations(ctx context.Context, userID int) ([]model.Ope
 		QueryRaw: query,
 	}
 
-	var operations []model.Operations
+	var operations []model.Operation
 
 	err = r.db.DB().ScanAllContext(ctx, &operations, q, args...)
 	if err != nil {

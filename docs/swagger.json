@@ -1,0 +1,289 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "REST API Server for money transfer",
+        "title": "Banking API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/api/v1/deposit": {
+            "post": {
+                "description": "make deposit for user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "MakeDeposit",
+                "operationId": "MakeDeposit",
+                "parameters": [
+                    {
+                        "description": "deposit info",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.DepositRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/schema.OperationSuccessSchema"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Body"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Body"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/operations/{id}": {
+            "get": {
+                "description": "get last operations for user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "GetLastOperations",
+                "operationId": "GetLastOperations",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user id",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/schema.GetOperationsSchema"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Body"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Body"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/send": {
+            "post": {
+                "description": "send money to another user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Send",
+                "operationId": "Send",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SendRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/schema.OperationSuccessSchema"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Body"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Body"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Body"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.DepositRequest": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "integer",
+                    "example": 1000
+                },
+                "user_id": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "model.Operation": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "integer"
+                },
+                "from_user_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "receiver_username": {
+                    "type": "string"
+                },
+                "sender_username": {
+                    "type": "string"
+                },
+                "to_user_id": {
+                    "type": "integer"
+                },
+                "transaction_date": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.SendRequest": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "integer",
+                    "example": 100
+                },
+                "receiver": {
+                    "type": "integer",
+                    "example": 2
+                },
+                "sender": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "schema.GetOperationsSchema": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Operation"
+                    }
+                },
+                "request": {
+                    "type": "string",
+                    "example": "/api/v1/send"
+                },
+                "time": {
+                    "type": "string",
+                    "example": "2023-01-01 00:00:00"
+                },
+                "title": {
+                    "type": "string",
+                    "example": "status"
+                }
+            }
+        },
+        "schema.OperationSuccessSchema": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "integer",
+                    "example": 1000
+                },
+                "request": {
+                    "type": "string",
+                    "example": "/api/v1/send"
+                },
+                "time": {
+                    "type": "string",
+                    "example": "2023-01-01 00:00:00"
+                },
+                "title": {
+                    "type": "string",
+                    "example": "status"
+                }
+            }
+        },
+        "utils.Body": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "request": {
+                    "type": "string"
+                },
+                "time": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
