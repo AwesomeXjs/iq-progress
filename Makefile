@@ -2,9 +2,6 @@ include .env.example
 LOCAL_BIN:=$(CURDIR)/bin
 
 run:
-	go run cmd/main.go
-
-up:
 	docker-compose up -d
 
 install-deps:
